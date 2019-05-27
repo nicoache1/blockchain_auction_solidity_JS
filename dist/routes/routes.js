@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _ContractController = _interopRequireDefault(require("../networking/controllers/ContractController/ContractController"));
+var _ContractController = _interopRequireDefault(require("../networking/controllers/ContractController"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 

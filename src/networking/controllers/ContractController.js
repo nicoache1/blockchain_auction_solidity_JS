@@ -1,8 +1,8 @@
 import path from 'path';
 import fs from 'fs';
 import solc from 'solc';
-import * as bytecodeFile from '../contracts/bytecode.json';
-import * as abiFile from '../contracts/abi.json';
+import * as bytecodeFile from '../../contracts/bytecode.json';
+import * as abiFile from '../../contracts/abi.json';
 import Web3Service from '../../services/Web3Service';
 
 class ContractController {
