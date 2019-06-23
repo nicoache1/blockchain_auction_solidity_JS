@@ -21,7 +21,7 @@ contract Auction {
 
     /* Structs */
     struct Bid{
-        address bidder;
+        address payable bidder;
         uint256 bid;
     }
 
@@ -89,9 +89,16 @@ contract Auction {
         Bid memory newBid = Bid(msg.sender, msg.value);
         bids[bidsCount] = newBid;
         bidsCount++;
-        // TODO: first we need to return the actualBid to the last offered.
+        sendMoneyBidder();
         actualBid = newBid;
         finishedAuction();
+    }
+
+    function sendMoneyBidder () private {
+        address payable bidder = actualBid.bidder;
+        uint256 bid = actualBid.bid;
+
+        bidder.transfer(bid);
     }
 
     function publishBids() public onlyOwner() isAuctionClose() {
@@ -109,14 +116,20 @@ contract Auction {
             open = false;
             publishBids();
             emit publishWinner(actualBid.bidder, actualBid.bid);
-            // TODO: Pay the amount of the bid to the owner of the auction item (ASK IF auction item owner == auction owner)
+            sendMoneyOwner();
         }
+    }
+
+    function sendMoneyOwner () private {
+        uint256 bid = actualBid.bid;
+        owner.transfer(bid);
     }
 
     function closeBid() public onlyOwner() isMinimumReached() {
         open = false;
         publishBids();
         emit publishWinner(actualBid.bidder, actualBid.bid);
+        sendMoneyOwner();
     }
 
     /* Getters */
