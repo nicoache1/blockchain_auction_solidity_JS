@@ -90,8 +90,16 @@ contract Auction {
         bids[bidsCount] = newBid;
         bidsCount++;
         // TODO: first we need to return the actualBid to the last offered.
+        sendMoneyBidder(actualBid);
         actualBid = newBid;
         finishedAuction();
+    }
+
+    function sendMoneyBidder () private {
+        address bidder = b.bidder;
+        uint256 bid = b.bid;
+
+        bidder.transfer(bid);
     }
 
     function publishBids() public onlyOwner() isAuctionClose() {
@@ -109,12 +117,23 @@ contract Auction {
             open = false;
             publishBids();
             emit publishWinner(actualBid.bidder, actualBid.bid);
+            sendMoneyOwner(actualBid);
             // TODO: Pay the amount of the bid to the owner of the auction item (ASK IF auction item owner == auction owner)
+
         }
+    }
+
+    function sendMoneyOwner () private {
+        uint256 bid = b.bid;
+
+        owner.transfer(bid);
     }
 
     function closeBid() public onlyOwner() isMinimumReached() {
         open = false;
+        publishBids();
+        emit publishWinner(actualBid.bidder, actualBid.bid);
+        sendMoneyOwner(actualBid);
     }
 
     /* Getters */
