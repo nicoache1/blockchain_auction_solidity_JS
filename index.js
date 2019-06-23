@@ -12,10 +12,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 routes(app);
 
 const setupServer = () => {
-  const server = app.listen(8001, () => {
-    console.log('app running on port.', server.address().port);
+  const server = app.listen(8001, async () => {
+    try {
+      console.log('app running on port.', server.address().port);
+    } catch (error) {
+      console.log(error);
+      console.log('Fail to deploy server.');
+    }
   });
 };
 
 setupServer();
-

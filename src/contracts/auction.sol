@@ -115,6 +115,8 @@ contract Auction {
 
     function closeBid() public onlyOwner() isMinimumReached() {
         open = false;
+        publishBids();
+        emit publishWinner(actualBid.bidder, actualBid.bid);
     }
 
     /* Getters */

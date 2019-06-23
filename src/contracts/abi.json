@@ -2,7 +2,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "getBalance",
+    "name": "getAuctionMaximumPrice",
     "outputs": [
       {
         "name": "",
@@ -16,21 +16,212 @@
   {
     "constant": false,
     "inputs": [],
-    "name": "split",
+    "name": "publishBids",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getAuctionName",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getAuctionBidsCount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getAuctionBasePrice",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "addBid",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [],
+    "name": "getActualBid",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "finishedAuction",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getAuctionMinimumPrice",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getAuctionDescription",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getBids",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]"
+      },
+      {
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "closeBid",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "name": "auctionItemUrl",
+        "type": "string"
+      },
+      {
+        "name": "auctionName",
+        "type": "string"
+      },
+      {
+        "name": "auctionDescription",
+        "type": "string"
+      },
+      {
+        "name": "auctionBasePrice",
+        "type": "uint256"
+      },
+      {
+        "name": "auctionMinimumPrice",
+        "type": "uint256"
+      },
+      {
+        "name": "auctionMaximumPrice",
+        "type": "uint256"
+      },
+      {
+        "name": "quantityOfBids",
+        "type": "uint256"
+      },
+      {
+        "name": "isPrivateData",
+        "type": "bool"
+      }
+    ],
     "payable": true,
     "stateMutability": "payable",
     "type": "constructor"
   },
   {
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "fallback"
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "winner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "bidValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "publishBid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "winner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "bidValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "publishWinner",
+    "type": "event"
   }
 ]

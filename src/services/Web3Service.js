@@ -1,9 +1,10 @@
 import dotenv from 'dotenv';
-// eslint-disable-next-line no-unused-vars
 import HDWalletProvider from 'truffle-hdwallet-provider';
 import Web3 from 'web3';
-// eslint-disable-next-line no-unused-vars
 import ganache from 'ganache-cli';
+
+const bytecodeFile = require('../contracts/bytecode.json');
+const abiFile = require('../contracts/abi.json');
 
 class Web3Service {
   constructor() {
@@ -21,9 +22,33 @@ class Web3Service {
     );
   }
 
-  getAccounts = async () => this.web3.eth.getAccounts();
+  getAccounts = async () => this.web3Provider.eth.getAccounts();
 
-  getContract = async abiFile => this.web3.eth.Contract(abiFile);
+  deployContract = async account => {
+    const bytecodeObject = bytecodeFile.bytecode;
+    const result = await this.web3Provider.eth
+      .Contract(abiFile)
+      .deploy({
+        data: `0x${bytecodeObject.object}`,
+        arguments: [
+          'url',
+          'testAuction',
+          'description',
+          100,
+          1000,
+          2000,
+          10,
+          false,
+        ],
+      })
+      .send({ gas: '3000000', from: account, value: 0 });
+    return result.options.address;
+  };
+
+  getContract = address => {
+    const contract = this.web3Provider.eth.Contract(abiFile, address);
+    return contract;
+  };
 }
 
 export default new Web3Service();

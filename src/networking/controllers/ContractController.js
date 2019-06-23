@@ -1,18 +1,20 @@
 import path from 'path';
 import fs from 'fs';
 import solc from 'solc';
-import * as bytecodeFile from '../../contracts/bytecode.json';
-import * as abiFile from '../../contracts/abi.json';
 import Web3Service from '../../services/Web3Service';
+import {
+  WriteContractsAbiFile,
+  WriteContractsBytecodeFile,
+} from '../../utils/utils';
 
 class ContractController {
   CompileContract = () => {
-    const contractPath = path.resolve('src', 'contracts', 'cooperative.sol');
+    const contractPath = path.resolve('src', 'contracts', 'auction.sol');
 
     const compilerInput = {
       language: 'Solidity',
       sources: {
-        Cooperative: { content: fs.readFileSync(contractPath, 'utf8') },
+        Auction: { content: fs.readFileSync(contractPath, 'utf8') },
       },
       settings: {
         outputSelection: {
@@ -37,20 +39,40 @@ class ContractController {
   };
 
   DeployContract = async () => {
-    const accounts = await Web3Service.getAccounts();
-    // eslint-disable-next-line no-console
-    console.log(accounts[0]);
-    const bytecodeObject = bytecodeFile.bytecode;
-
     try {
-      const result = await Web3Service.getContract(abiFile)
-        .deploy({ data: `0x${bytecodeObject.object}` })
-        .send({ gas: '1000000', from: accounts[0], value: 0 });
-      // eslint-disable-next-line no-console
-      console.log(`contract address: ${result.options.address}`);
+      const accounts = await Web3Service.getAccounts();
+      const contract = await Web3Service.deployContract(accounts[0]);
+      // TODO: Ask about this.
+      console.log(`contract address: ${contract}`);
+      return contract;
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(error);
+      throw new Error(error);
+    }
+  };
+
+  GetName = async () => {
+    const MyContract = Web3Service.getContract(
+      '0x131E47EB0504657124D2d7249d2db8C64A08C16B',
+    );
+    try {
+      const name = await MyContract.methods.getAuctionName().call();
+      return name;
+    } catch (error) {
+      throw new Error('Error');
+    }
+  };
+
+  GetDescription = async () => {
+    const MyContract = Web3Service.getContract(
+      '0x131E47EB0504657124D2d7249d2db8C64A08C16B',
+    );
+    try {
+      const description = await MyContract.methods
+        .getAuctionDescription()
+        .call();
+      return description;
+    } catch (error) {
+      throw new Error('Error');
     }
   };
 }
