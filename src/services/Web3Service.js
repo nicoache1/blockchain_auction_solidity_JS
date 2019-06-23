@@ -26,8 +26,7 @@ class Web3Service {
 
   deployContract = async account => {
     const bytecodeObject = bytecodeFile.bytecode;
-    const result = await this.web3Provider.eth
-      .Contract(abiFile)
+    const result = await new this.web3Provider.eth.Contract(abiFile)
       .deploy({
         data: `0x${bytecodeObject.object}`,
         arguments: [
