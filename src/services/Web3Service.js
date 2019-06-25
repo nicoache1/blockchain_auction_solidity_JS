@@ -10,11 +10,11 @@ class Web3Service {
   constructor() {
     dotenv.config();
     // TODO: This is for rinkeby add address to .env file etc.
-    // this.wallerProvider = new HDWalletProvider(
+    // this.walletProvider = new HDWalletProvider(
     //   '{{MNEMONIC}}',
     //   'https://rinkeby.infura.io/v3/29a56dc454464b7c9f5045f8682913f1',
     // );
-    // const web3 = new Web3(wallerProvider);
+    // const web3 = new Web3(walletProvider);
 
     // This is for ganache.
     this.web3Provider = new Web3(
@@ -24,20 +24,30 @@ class Web3Service {
 
   getAccounts = async () => this.web3Provider.eth.getAccounts();
 
-  deployContract = async account => {
+  deployContract = async (
+    account,
+    item,
+    auctionName,
+    auctionDescription,
+    auctionBasePrice,
+    auctionMinimumPrice,
+    auctionMaximumPrice,
+    maxBidsCount,
+    privateData,
+  ) => {
     const bytecodeObject = bytecodeFile.bytecode;
     const result = await new this.web3Provider.eth.Contract(abiFile)
       .deploy({
         data: `0x${bytecodeObject.object}`,
         arguments: [
-          'url',
-          'testAuction',
-          'description',
-          100,
-          1000,
-          2000,
-          10,
-          false,
+          item,
+          auctionName,
+          auctionDescription,
+          auctionBasePrice,
+          auctionMinimumPrice,
+          auctionMaximumPrice,
+          maxBidsCount,
+          privateData,
         ],
       })
       .send({ gas: '3000000', from: account, value: 0 });

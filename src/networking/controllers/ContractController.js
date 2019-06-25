@@ -6,9 +6,14 @@ import {
   WriteContractsAbiFile,
   WriteContractsBytecodeFile,
 } from '../../utils/utils';
+import { errorStrings } from './errorStrings';
 
 class ContractController {
-  CompileContract = () => {
+  constructor() {
+    this.contractAddress;
+  }
+
+  compileContract = () => {
     const contractPath = path.resolve('src', 'contracts', 'auction.sol');
 
     const compilerInput = {
@@ -30,7 +35,6 @@ class ContractController {
     );
 
     if (compiledContract.errors) {
-      // eslint-disable-next-line no-console
       compiledContract.errors.forEach(err => console.log(err.formattedMessage));
     }
 
@@ -38,42 +42,40 @@ class ContractController {
     WriteContractsBytecodeFile(compiledContract);
   };
 
-  DeployContract = async () => {
+  deployContract = async (
+    item,
+    auctionName,
+    auctionDescription,
+    auctionBasePrice,
+    auctionMinimumPrice,
+    auctionMaximumPrice,
+    maxBidsCount,
+    privateData,
+  ) => {
     try {
       const accounts = await Web3Service.getAccounts();
-      const contract = await Web3Service.deployContract(accounts[0]);
-      // TODO: Ask about this.
-      console.log(`contract address: ${contract}`);
+      const contract = await Web3Service.deployContract(
+        accounts[0],
+        item,
+        auctionName,
+        auctionDescription,
+        auctionBasePrice,
+        auctionMinimumPrice,
+        auctionMaximumPrice,
+        maxBidsCount,
+        privateData,
+      );
+      this.contractAddress = contract;
       return contract;
     } catch (error) {
-      throw new Error(error);
+      throw new Error(errorStrings.ERROR_DEPLOY_CONTRACT);
     }
   };
 
-  GetName = async () => {
-    const MyContract = Web3Service.getContract(
-      '0x131E47EB0504657124D2d7249d2db8C64A08C16B',
-    );
-    try {
-      const name = await MyContract.methods.getAuctionName().call();
-      return name;
-    } catch (error) {
-      throw new Error('Error');
-    }
-  };
-
-  GetDescription = async () => {
-    const MyContract = Web3Service.getContract(
-      '0x131E47EB0504657124D2d7249d2db8C64A08C16B',
-    );
-    try {
-      const description = await MyContract.methods
-        .getAuctionDescription()
-        .call();
-      return description;
-    } catch (error) {
-      throw new Error('Error');
-    }
+  getContract = () => {
+    console.log(this.contractAddress);
+    const MyContract = Web3Service.getContract(this.contractAddress);
+    return MyContract;
   };
 }
 

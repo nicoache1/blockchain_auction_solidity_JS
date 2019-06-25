@@ -1,51 +1,158 @@
 import ContractController from '../networking/controllers/ContractController';
+import AuctionController from '../networking/controllers/AuctionController';
+import { getErrorMessage } from '../utils/utils';
 
 const appRouter = app => {
-  app.get('/Contract/Compile', async (req, res) => {
+  app.get('/Contract/Compile', async (_req, res) => {
     try {
-      await ContractController.CompileContract();
+      await ContractController.compileContract();
       res.status(200).send('Compiled');
     } catch (error) {
-      const errorResponse = error.response
-        ? error.response.data
-        : error.message;
-      res.status(500).send(errorResponse);
+      res.status(500).send(getErrorMessage(errorResponse));
     }
   });
 
-  app.get('/Contract/Deploy', async (req, res) => {
+  app.post('/Contract/Deploy', async (_req, res) => {
     try {
-      const contract = await ContractController.DeployContract();
-      res.status(200).send(contract);
+      const {
+        item,
+        auctionName,
+        auctionDescription,
+        auctionBasePrice,
+        auctionMinimumPrice,
+        auctionMaximumPrice,
+        maxBidsCount,
+        privateData,
+      } = req.body;
+      const contract = await ContractController.deployContract(
+        item,
+        auctionName,
+        auctionDescription,
+        auctionBasePrice,
+        auctionMinimumPrice,
+        auctionMaximumPrice,
+        maxBidsCount,
+        privateData,
+      );
+      res.status(200).send(`The contract address is ${contract}`);
     } catch (error) {
-      const errorResponse = error.response
-        ? error.response.data
-        : error.message;
-      res.status(500).send(errorResponse);
+      res.status(500).send(getErrorMessage(errorResponse));
     }
   });
 
-  app.get('/Auction/Name', async (req, res) => {
+  app.get('/Auction/Name', async (_req, res) => {
     try {
-      const name = await ContractController.GetName();
-      res.status(200).send(name);
+      const { fromAddress } = req.query;
+      const name = await AuctionController.getName(fromAddress);
+      res.status(200).send(`The name of the auction is ${name}`);
     } catch (error) {
-      const errorResponse = error.response
-        ? error.response.data
-        : error.message;
-      res.status(500).send(errorResponse);
+      res.status(500).send(getErrorMessage(errorResponse));
     }
   });
 
-  app.get('/Auction/Description', async (req, res) => {
+  app.get('/Auction/Description', async (_req, res) => {
     try {
-      const description = await ContractController.GetDescription();
-      res.status(200).send(description);
+      const { fromAddress } = req.query;
+      const description = await AuctionController.getDescription(fromAddress);
+      res.status(200).send(`The description of the auction is ${description}`);
     } catch (error) {
-      const errorResponse = error.response
-        ? error.response.data
-        : error.message;
-      res.status(500).send(errorResponse);
+      res.status(500).send(getErrorMessage(errorResponse));
+    }
+  });
+
+  app.get('/Auction/ActualBid', async (_req, res) => {
+    try {
+      const { fromAddress } = req.query;
+      const actualBid = await AuctionController.getActualBid(fromAddress);
+      res.status(200).send(`The max bid of the auction is ${actualBid}`);
+    } catch (error) {
+      res.status(500).send(getErrorMessage(errorResponse));
+    }
+  });
+
+  app.get('/Auction/BasePrice', async (_req, res) => {
+    try {
+      const { fromAddress } = req.query;
+      const basePrice = await AuctionController.getAuctionBasePrice(
+        fromAddress,
+      );
+      res.status(200).send(`The base price of the auction is ${basePrice}`);
+    } catch (error) {
+      res.status(500).send(getErrorMessage(errorResponse));
+    }
+  });
+
+  app.get('/Auction/MaximumPrice', async (_req, res) => {
+    try {
+      const { fromAddress } = req.query;
+      const maximumPrice = await AuctionController.getAuctionMaximumPrice(
+        fromAddress,
+      );
+      res
+        .status(200)
+        .send(`The maximum price of the auction is ${maximumPrice}`);
+    } catch (error) {
+      res.status(500).send(getErrorMessage(errorResponse));
+    }
+  });
+
+  app.get('/Auction/MinimumPrice', async (_req, res) => {
+    try {
+      const { fromAddress } = req.query;
+      const minimumPrice = await AuctionController.getAuctionMinimumPrice(
+        fromAddress,
+      );
+      res
+        .status(200)
+        .send(`The minimum price of the auction is ${minimumPrice}`);
+    } catch (error) {
+      res.status(500).send(getErrorMessage(errorResponse));
+    }
+  });
+
+  app.get('/Auction/BidsCount', async (_req, res) => {
+    try {
+      const { fromAddress } = req.query;
+      const bidsCount = await AuctionController.getAuctionBidsCount(
+        fromAddress,
+      );
+      res.status(200).send(`The bids count of the auction is ${bidsCount}`);
+    } catch (error) {
+      res.status(500).send(getErrorMessage(errorResponse));
+    }
+  });
+
+  app.get('/Auction/Bids', async (_req, res) => {
+    try {
+      const { fromAddress } = req.query;
+      const bids = await AuctionController.getBids(fromAddress);
+      res.status(200).send(`The bids count of the auction is ${bids}`);
+    } catch (error) {
+      res.status(500).send(getErrorMessage(errorResponse));
+    }
+  });
+
+  app.put('/Auction', async (_req, res) => {
+    try {
+      const { fromAddress } = req.body;
+      const closedResponse = await AuctionController.closeAuction(fromAddress);
+      res.status(200).send(`The auction is closed ${closedResponse}`);
+    } catch (error) {
+      res.status(500).send(getErrorMessage(errorResponse));
+    }
+  });
+
+  app.post('/Auction/Bids', async (_req, res) => {
+    try {
+      const { fromAddress, value, gas } = req.body;
+      const addBidResponse = await AuctionController.addBid(
+        fromAddress,
+        value,
+        gas,
+      );
+      res.status(200).send(`The auction is closed ${addBidResponse}`);
+    } catch (error) {
+      res.status(500).send(getErrorMessage(errorResponse));
     }
   });
 };

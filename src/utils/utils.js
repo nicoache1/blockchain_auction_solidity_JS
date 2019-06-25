@@ -14,3 +14,6 @@ export const WriteContractsBytecodeFile = compiledContract => {
   const byteCodePath = path.resolve('src', 'contracts', 'bytecode.json');
   fs.writeFileSync(byteCodePath, JSON.stringify(bytecode, null, 2));
 };
+
+export const getErrorMessage = error =>
+  error.response ? error.response.data : error.message;

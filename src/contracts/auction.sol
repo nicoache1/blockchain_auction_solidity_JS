@@ -101,6 +101,8 @@ contract Auction {
         bidder.transfer(bid);
     }
 
+
+    // TODO: ask about the private/public methods.
     function publishBids() public onlyOwner() isAuctionClose() {
         uint count = 0;
         for (uint i = 1; i <= bidsCount; i++){
@@ -125,7 +127,7 @@ contract Auction {
         owner.transfer(bid);
     }
 
-    function closeBid() public onlyOwner() isMinimumReached() {
+    function closeAuction() public onlyOwner() isMinimumReached() {
         open = false;
         publishBids();
         emit publishWinner(actualBid.bidder, actualBid.bid);
