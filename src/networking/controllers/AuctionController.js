@@ -101,10 +101,8 @@ class AuctionController {
       const bids = await MyContract.methods.getBids().call({
         from: address,
       });
-      console.log(bids);
       return bids;
     } catch (error) {
-      console.log(error);
       throw new Error(errorStrings.ERROR_GET_BIDS);
     }
   };
@@ -132,6 +130,18 @@ class AuctionController {
       return response;
     } catch (error) {
       throw new Error(errorStrings.ERROR_ADD_BID);
+    }
+  };
+
+  getMoneyBalance = async address => {
+    const MyContract = ContractController.getContract();
+    try {
+      const response = await MyContract.methods.getMoneyBalance().send({
+        from: address,
+      });
+      return response;
+    } catch (error) {
+      throw new Error(errorStrings.ERROR_GET_BALANCE);
     }
   };
 }

@@ -16,15 +16,6 @@
   {
     "constant": false,
     "inputs": [],
-    "name": "publishBids",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
     "name": "closeAuction",
     "outputs": [],
     "payable": false,
@@ -76,6 +67,15 @@
   {
     "constant": false,
     "inputs": [],
+    "name": "sendMoneyBidder",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
     "name": "addBid",
     "outputs": [],
     "payable": true,
@@ -94,15 +94,6 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "finishedAuction",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -149,6 +140,15 @@
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "sendMoneyOwner",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {

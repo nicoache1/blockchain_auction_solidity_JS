@@ -12,6 +12,7 @@ contract Auction {
     uint256 private maximumPrice;
     uint256 private maximumQuantityOfBids;
     uint256 private bidsCount;
+    uint256 private money;
     Bid private actualBid;
     bool open;
     bool isPrivate;
@@ -41,6 +42,7 @@ contract Auction {
         open = true;
         maximumQuantityOfBids = quantityOfBids;
         isPrivate = isPrivateData;
+        bidsCount = 0;
     }
 
     /* Events */
@@ -84,26 +86,31 @@ contract Auction {
         _;
     }
 
+    modifier hasBalance(){
+        require(money > 0, "Needs balance");
+        _;
+    }
+
      /* Functions */
     function addBid() public payable isBiggerThanActualBid() isNotSameBidderThanActualBid() isAuctionOpen() {
         Bid memory newBid = Bid(msg.sender, msg.value);
         bids[bidsCount] = newBid;
         bidsCount++;
         sendMoneyBidder();
+        money = address(this).balance;
         actualBid = newBid;
         finishedAuction();
     }
 
-    function sendMoneyBidder () private {
-        address payable bidder = actualBid.bidder;
-        uint256 bid = actualBid.bid;
-
-        bidder.transfer(bid);
+    function sendMoneyBidder () public payable {
+        if (bidsCount>1) {
+            address payable bidder = actualBid.bidder;
+            uint256 bid = actualBid.bid;
+            bidder.transfer(bid);
+        }
     }
 
-
-    // TODO: ask about the private/public methods.
-    function publishBids() public onlyOwner() isAuctionClose() {
+    function publishBids() private isAuctionClose() {
         uint count = 0;
         for (uint i = 1; i <= bidsCount; i++){
             emit publishBid(bids[i].bidder, bids[i].bid);
@@ -111,9 +118,7 @@ contract Auction {
         }
     }
 
-    function finishedAuction() public payable isAuctionOpen() {
-        // TODO: ASK ABOUT THIS CONDITION
-        // Se recibe una oferta igual o mayor al precio mínimo y el dueño del artículo decide cerrar la subasta.
+    function finishedAuction() private isAuctionOpen() {
         if(bidsCount == maximumQuantityOfBids || actualBid.bid >= maximumPrice){
             open = false;
             publishBids();
@@ -122,7 +127,7 @@ contract Auction {
         }
     }
 
-    function sendMoneyOwner () private {
+    function sendMoneyOwner () public payable {
         uint256 bid = actualBid.bid;
         owner.transfer(bid);
     }
@@ -163,18 +168,20 @@ contract Auction {
         return bidsCount;
     }
 
+    function getMoneyBalance() public view onlyOwner() returns(uint256){
+        return money;
+    }
+
     function getBids()
         public view
         onlyOwner()
-        returns (address[] memory, uint[] memory)
+        returns (address[] memory, uint256[] memory)
     {
-        address[] memory addressess;
-        uint[] memory bidsMaked;
-        uint count = 0;
-        for (uint i = 0; i <= bidsCount; i++){
+        address[] memory addressess = new address[](bidsCount);
+        uint256[] memory bidsMaked = new uint256[](bidsCount);
+        for (uint256 i = 0; i < bidsCount; i++){
             addressess[i] = bids[i].bidder;
             bidsMaked[i] = bids[i].bid;
-            count++;
         }
         return (addressess, bidsMaked);
     }

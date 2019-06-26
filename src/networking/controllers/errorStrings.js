@@ -17,4 +17,5 @@ export const errorStrings = {
   ERROR_CLOSE_AUCTION: 'Error: an error happen when tried to close the auction',
   ERROR_ADD_BID:
     'Error: an error happen when tried to add a bid to the auction',
+  ERROR_GET_BALANCE: 'Error: an error happen when tried to get the balance',
 };

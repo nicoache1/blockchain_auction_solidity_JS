@@ -132,6 +132,16 @@ const appRouter = app => {
     }
   });
 
+  app.get('/Auction/Balance', async (req, res) => {
+    try {
+      const { fromAddress } = req.query;
+      const balance = await AuctionController.getMoneyBalance(fromAddress);
+      res.status(200).send(`The balance of the auction is ${balance}`);
+    } catch (error) {
+      res.status(500).send(getErrorMessage(error));
+    }
+  });
+
   app.put('/Auction', async (req, res) => {
     try {
       const { fromAddress } = req.body;
@@ -152,7 +162,6 @@ const appRouter = app => {
       );
       res.status(200).send(`New bid addded to the auction ${addBidResponse}`);
     } catch (error) {
-      console.log(error);
       res.status(500).send(getErrorMessage(error));
     }
   });
