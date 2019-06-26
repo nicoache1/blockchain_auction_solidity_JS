@@ -1,11 +1,12 @@
 import { errorStrings } from './errorStrings';
+import ContractController from './ContractController';
 
 class AuctionController {
   // TODO: Ask about the gas and if we should use send and send the gas
   // from the account that is being called, etc.
 
   getName = async address => {
-    const MyContract = getContract();
+    const MyContract = ContractController.getContract();
     try {
       const name = await MyContract.methods.getAuctionName().call({
         from: address,
@@ -17,7 +18,7 @@ class AuctionController {
   };
 
   getDescription = async address => {
-    const MyContract = getContract();
+    const MyContract = ContractController.getContract();
     try {
       const description = await MyContract.methods
         .getAuctionDescription()
@@ -30,8 +31,8 @@ class AuctionController {
     }
   };
 
-  getActualBid = async () => {
-    const MyContract = getContract();
+  getActualBid = async address => {
+    const MyContract = ContractController.getContract();
     try {
       const actualBid = await MyContract.methods.getActualBid().call({
         from: address,
@@ -43,7 +44,7 @@ class AuctionController {
   };
 
   getAuctionBasePrice = async address => {
-    const MyContract = getContract();
+    const MyContract = ContractController.getContract();
     try {
       const basePrice = await MyContract.methods.getAuctionBasePrice().call({
         from: address,
@@ -55,7 +56,7 @@ class AuctionController {
   };
 
   getAuctionMinimumPrice = async address => {
-    const MyContract = getContract();
+    const MyContract = ContractController.getContract();
     try {
       const minimumPrice = await MyContract.methods
         .getAuctionMinimumPrice()
@@ -69,7 +70,7 @@ class AuctionController {
   };
 
   getAuctionMaximumPrice = async address => {
-    const MyContract = getContract();
+    const MyContract = ContractController.getContract();
     try {
       const maximumPrice = await MyContract.methods
         .getAuctionMaximumPrice()
@@ -83,7 +84,7 @@ class AuctionController {
   };
 
   getAuctionBidsCount = async address => {
-    const MyContract = getContract();
+    const MyContract = ContractController.getContract();
     try {
       const bidsCount = await MyContract.methods.getAuctionBidsCount().call({
         from: address,
@@ -95,19 +96,21 @@ class AuctionController {
   };
 
   getBids = async address => {
-    const MyContract = getContract();
+    const MyContract = ContractController.getContract();
     try {
       const bids = await MyContract.methods.getBids().call({
         from: address,
       });
+      console.log(bids);
       return bids;
     } catch (error) {
+      console.log(error);
       throw new Error(errorStrings.ERROR_GET_BIDS);
     }
   };
 
   closeAuction = async address => {
-    const MyContract = getContract();
+    const MyContract = ContractController.getContract();
     try {
       const response = await MyContract.methods.closeAuction().call({
         from: address,
@@ -119,7 +122,7 @@ class AuctionController {
   };
 
   addBid = async (address, value, gas) => {
-    const MyContract = getContract();
+    const MyContract = ContractController.getContract();
     try {
       const response = await MyContract.methods.addBid().send({
         from: address,

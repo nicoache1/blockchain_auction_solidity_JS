@@ -38,7 +38,7 @@ contract Auction {
         maximumPrice = auctionMaximumPrice;
         Bid memory minimumBid = Bid(msg.sender, auctionBasePrice);
         actualBid = minimumBid;
-        open = false;
+        open = true;
         maximumQuantityOfBids = quantityOfBids;
         isPrivate = isPrivateData;
     }
@@ -75,7 +75,7 @@ contract Auction {
     }
 
     modifier isAuctionClose(){
-        require(open == true, "Auction is close");
+        require(open == false, "Auction is close");
         _;
     }
 
@@ -171,7 +171,7 @@ contract Auction {
         address[] memory addressess;
         uint[] memory bidsMaked;
         uint count = 0;
-        for (uint i = 1; i <= bidsCount; i++){
+        for (uint i = 0; i <= bidsCount; i++){
             addressess[i] = bids[i].bidder;
             bidsMaked[i] = bids[i].bid;
             count++;

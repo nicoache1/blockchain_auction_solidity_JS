@@ -73,7 +73,6 @@ class ContractController {
   };
 
   getContract = () => {
-    console.log(this.contractAddress);
     const MyContract = Web3Service.getContract(this.contractAddress);
     return MyContract;
   };

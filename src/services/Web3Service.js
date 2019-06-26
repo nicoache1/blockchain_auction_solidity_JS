@@ -55,7 +55,7 @@ class Web3Service {
   };
 
   getContract = address => {
-    const contract = this.web3Provider.eth.Contract(abiFile, address);
+    const contract = new this.web3Provider.eth.Contract(abiFile, address);
     return contract;
   };
 }

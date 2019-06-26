@@ -23,6 +23,15 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [],
+    "name": "closeAuction",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "getAuctionName",
@@ -140,15 +149,6 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "closeBid",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
