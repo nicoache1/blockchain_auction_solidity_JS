@@ -110,7 +110,7 @@ class AuctionController {
   closeAuction = async address => {
     const MyContract = ContractController.getContract();
     try {
-      const response = await MyContract.methods.closeAuction().call({
+      const response = await MyContract.methods.closeAuction().send({
         from: address,
       });
       return response;

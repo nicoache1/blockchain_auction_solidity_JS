@@ -144,7 +144,7 @@ const appRouter = app => {
 
   app.put('/Auction', async (req, res) => {
     try {
-      const { fromAddress } = req.query;
+      const { fromAddress } = req.body;
       const closedResponse = await AuctionController.closeAuction(fromAddress);
       res.status(200).send(`The auction from ${fromAddress} is closed`);
     } catch (error) {
