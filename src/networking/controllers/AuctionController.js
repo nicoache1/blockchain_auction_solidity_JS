@@ -136,7 +136,7 @@ class AuctionController {
   getMoneyBalance = async address => {
     const MyContract = ContractController.getContract();
     try {
-      const response = await MyContract.methods.getMoneyBalance().send({
+      const response = await MyContract.methods.getMoneyBalance().call({
         from: address,
       });
       return response;
@@ -145,5 +145,7 @@ class AuctionController {
     }
   };
 }
+
+
 
 export default new AuctionController();
