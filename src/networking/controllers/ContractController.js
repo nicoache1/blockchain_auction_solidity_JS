@@ -43,6 +43,7 @@ class ContractController {
   };
 
   deployContract = async (
+    account,
     item,
     auctionName,
     auctionDescription,
@@ -53,9 +54,8 @@ class ContractController {
     privateData,
   ) => {
     try {
-      const accounts = await Web3Service.getAccounts();
       const contract = await Web3Service.deployContract(
-        accounts[0],
+        account,
         item,
         auctionName,
         auctionDescription,

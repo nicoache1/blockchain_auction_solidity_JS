@@ -15,6 +15,7 @@ const appRouter = app => {
   app.post('/Contract/Deploy', async (req, res) => {
     try {
       const {
+        account,
         item,
         auctionName,
         auctionDescription,
@@ -25,6 +26,7 @@ const appRouter = app => {
         privateData,
       } = req.body;
       const contract = await ContractController.deployContract(
+        account,
         item,
         auctionName,
         auctionDescription,
