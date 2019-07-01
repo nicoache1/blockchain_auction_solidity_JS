@@ -112,7 +112,7 @@ contract Auction {
 
     function publishBids() private isAuctionClose() {
         uint count = 0;
-        for (uint i = 1; i <= bidsCount; i++){
+        for (uint i = 0; i < bidsCount; i++){
             emit publishBid(bids[i].bidder, bids[i].bid);
             count++;
         }
@@ -127,7 +127,7 @@ contract Auction {
         }
     }
 
-    function sendMoneyOwner () public payable {
+    function sendMoneyOwner() public payable isAuctionClose() {
         uint256 bid = actualBid.bid;
         owner.transfer(bid);
     }
@@ -169,7 +169,7 @@ contract Auction {
     }
 
     function getMoneyBalance() public view onlyOwner() returns(uint256){
-        return money;
+        return address(this).balance;
     }
 
     function getBids()
