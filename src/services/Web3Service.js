@@ -18,7 +18,7 @@ class Web3Service {
 
     // This is for ganache.
     this.web3Provider = new Web3(
-      new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545'),
+      new Web3.providers.HttpProvider('HTTP://127.0.0.1:7545'),
     );
   }
 

@@ -126,7 +126,7 @@ const appRouter = app => {
     try {
       const { fromAddress } = req.query;
       const bids = await AuctionController.getBids(fromAddress);
-      res.status(200).send(`The bids of the auction are ${bids}`);
+      res.status(200).send(`The bids of the auction are ${JSON.stringify(bids)}`);
     } catch (error) {
       res.status(500).send(getErrorMessage(error));
     }
@@ -160,7 +160,7 @@ const appRouter = app => {
         value,
         gas,
       );
-      res.status(200).send(`New bid addded to the auction ${addBidResponse}`);
+      res.status(200).send(`New bid addded to the auction from ${fromAddress} with value ${value}`);
     } catch (error) {
       res.status(500).send(getErrorMessage(error));
     }
