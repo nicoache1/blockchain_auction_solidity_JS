@@ -56,7 +56,7 @@ contract Auction {
     }
 
     modifier isBiggerThanActualBid(){
-        require(msg.value >= actualBid.bid, "You have to bid an amount bigger than the actual bid");
+        require(msg.value > actualBid.bid, "You have to bid an amount bigger than the actual bid");
         _;
     }
 
@@ -72,12 +72,12 @@ contract Auction {
     }
 
     modifier isAuctionOpen(){
-        require(open == true, "Auction is open");
+        require(open == true, "Auction is close");
         _;
     }
 
     modifier isAuctionClose(){
-        require(open == false, "Auction is close");
+        require(open == false, "Auction is open");
         _;
     }
 
@@ -132,7 +132,7 @@ contract Auction {
         owner.transfer(bid);
     }
 
-    function closeAuction() public onlyOwner() isMinimumReached() {
+    function closeAuction() public onlyOwner() isMinimumReached() isAuctionOpen() {
         open = false;
         publishBids();
         emit publishWinner(actualBid.bidder, actualBid.bid);
