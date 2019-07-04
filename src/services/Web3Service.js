@@ -9,17 +9,23 @@ const abiFile = require('../contracts/abi.json');
 class Web3Service {
   constructor() {
     dotenv.config();
-    // TODO: This is for rinkeby add address to .env file etc.
-    // this.walletProvider = new HDWalletProvider(
-    //   '{{MNEMONIC}}',
-    //   'https://rinkeby.infura.io/v3/29a56dc454464b7c9f5045f8682913f1',
-    // );
-    // const web3 = new Web3(walletProvider);
-
-    // This is for ganache.
-    this.web3Provider = new Web3(
-      new Web3.providers.HttpProvider('HTTP://127.0.0.1:7545'),
-    );
+    const ganacheDir = process.env.GANACHE_DIR;
+    const rinkebyMnemonic = process.env.RINKEBY_MNEMONIC;
+    // This is for rinkeby
+    if (rinkebyMnemonic !== 'MNEMONIC') {
+      this.walletProvider = new HDWalletProvider(
+        `${rinkebyMnemonic}`,
+        'https://rinkeby.infura.io/v3/29a56dc454464b7c9f5045f8682913f1',
+      );
+      this.web3Provider = new Web3(this.walletProvider, null, {
+        transactionConfirmationBlocks: 10,
+      });
+    } else {
+      // This is for ganache.
+      this.web3Provider = new Web3(
+        new Web3.providers.HttpProvider(`${ganacheDir}`),
+      );
+    }
   }
 
   getAccounts = async () => this.web3Provider.eth.getAccounts();

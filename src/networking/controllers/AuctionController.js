@@ -101,7 +101,12 @@ class AuctionController {
       const bids = await MyContract.methods.getBids().call({
         from: address,
       });
-      return bids;
+      const addressess = bids['0'];
+      const values = bids['1'];
+      return addressess.map((address, index) => ({
+        bidderAddress: address,
+        offeredAmount: values[index],
+      }));
     } catch (error) {
       throw new Error(errorStrings.ERROR_GET_BIDS);
     }
@@ -145,7 +150,5 @@ class AuctionController {
     }
   };
 }
-
-
 
 export default new AuctionController();

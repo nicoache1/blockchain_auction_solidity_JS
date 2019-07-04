@@ -45,9 +45,9 @@ const appRouter = app => {
   app.get('/Auction/Name', async (req, res) => {
     try {
       const { fromAddress } = req.query;
-      if (fromAddress == null){
-        throw new Error("fromAddress is empty");
-      } 
+      if (fromAddress == null) {
+        throw new Error('fromAddress is empty');
+      }
       const name = await AuctionController.getName(fromAddress);
       res.status(200).send(`The name of the auction is ${name}`);
     } catch (error) {
@@ -58,9 +58,9 @@ const appRouter = app => {
   app.get('/Auction/Description', async (req, res) => {
     try {
       const { fromAddress } = req.query;
-      if (fromAddress == null){
-        throw new Error("fromAddress is empty");
-      } 
+      if (fromAddress == null) {
+        throw new Error('fromAddress is empty');
+      }
       const description = await AuctionController.getDescription(fromAddress);
       res.status(200).send(`The description of the auction is ${description}`);
     } catch (error) {
@@ -71,9 +71,9 @@ const appRouter = app => {
   app.get('/Auction/ActualBid', async (req, res) => {
     try {
       const { fromAddress } = req.query;
-      if (fromAddress == null){
-        throw new Error("fromAddress is empty");
-      } 
+      if (fromAddress == null) {
+        throw new Error('fromAddress is empty');
+      }
       const actualBid = await AuctionController.getActualBid(fromAddress);
       res.status(200).send(`The max bid of the auction is ${actualBid}`);
     } catch (error) {
@@ -84,9 +84,9 @@ const appRouter = app => {
   app.get('/Auction/BasePrice', async (req, res) => {
     try {
       const { fromAddress } = req.query;
-      if (fromAddress == null){
-        throw new Error("fromAddress is empty");
-      } 
+      if (fromAddress == null) {
+        throw new Error('fromAddress is empty');
+      }
       const basePrice = await AuctionController.getAuctionBasePrice(
         fromAddress,
       );
@@ -99,9 +99,9 @@ const appRouter = app => {
   app.get('/Auction/MaximumPrice', async (req, res) => {
     try {
       const { fromAddress } = req.query;
-      if (fromAddress == null){
-        throw new Error("fromAddress is empty");
-      } 
+      if (fromAddress == null) {
+        throw new Error('fromAddress is empty');
+      }
       const maximumPrice = await AuctionController.getAuctionMaximumPrice(
         fromAddress,
       );
@@ -116,9 +116,9 @@ const appRouter = app => {
   app.get('/Auction/MinimumPrice', async (req, res) => {
     try {
       const { fromAddress } = req.query;
-      if (fromAddress == null){
-        throw new Error("fromAddress is empty");
-      } 
+      if (fromAddress == null) {
+        throw new Error('fromAddress is empty');
+      }
       const minimumPrice = await AuctionController.getAuctionMinimumPrice(
         fromAddress,
       );
@@ -133,9 +133,9 @@ const appRouter = app => {
   app.get('/Auction/BidsCount', async (req, res) => {
     try {
       const { fromAddress } = req.query;
-      if (fromAddress == null){
-        throw new Error("fromAddress is empty");
-      } 
+      if (fromAddress == null) {
+        throw new Error('fromAddress is empty');
+      }
       const bidsCount = await AuctionController.getAuctionBidsCount(
         fromAddress,
       );
@@ -148,11 +148,11 @@ const appRouter = app => {
   app.get('/Auction/Bids', async (req, res) => {
     try {
       const { fromAddress } = req.query;
-      if (fromAddress == null){
-        throw new Error("fromAddress is empty");
-      } 
+      if (fromAddress == null) {
+        throw new Error('fromAddress is empty');
+      }
       const bids = await AuctionController.getBids(fromAddress);
-      res.status(200).send(`The bids of the auction are ${JSON.stringify(bids)}`);
+      res.status(200).send({ bids });
     } catch (error) {
       res.status(500).send(getErrorMessage(error));
     }
@@ -161,9 +161,9 @@ const appRouter = app => {
   app.get('/Auction/Balance', async (req, res) => {
     try {
       const { fromAddress } = req.query;
-      if (fromAddress == null){
-        throw new Error("fromAddress is empty");
-      } 
+      if (fromAddress == null) {
+        throw new Error('fromAddress is empty');
+      }
       const balance = await AuctionController.getMoneyBalance(fromAddress);
       res.status(200).send(`The balance of the auction is ${balance}`);
     } catch (error) {
@@ -174,10 +174,10 @@ const appRouter = app => {
   app.put('/Auction', async (req, res) => {
     try {
       const { fromAddress } = req.body;
-      if (fromAddress == null){
-        throw new Error("fromAddress is empty");
-      } 
-      const closedResponse = await AuctionController.closeAuction(fromAddress);
+      if (fromAddress == null) {
+        throw new Error('fromAddress is empty');
+      }
+      await AuctionController.closeAuction(fromAddress);
       res.status(200).send(`The auction from ${fromAddress} is closed`);
     } catch (error) {
       res.status(500).send(getErrorMessage(error));
@@ -187,12 +187,12 @@ const appRouter = app => {
   app.post('/Auction/Bids', async (req, res) => {
     try {
       const { fromAddress, value, gas } = req.body;
-      const addBidResponse = await AuctionController.addBid(
-        fromAddress,
-        value,
-        gas,
-      );
-      res.status(200).send(`New bid addded to the auction from ${fromAddress} with value ${value}`);
+      await AuctionController.addBid(fromAddress, value, gas);
+      res
+        .status(200)
+        .send(
+          `New bid addded to the auction from ${fromAddress} with value ${value}`,
+        );
     } catch (error) {
       res.status(500).send(getErrorMessage(error));
     }
